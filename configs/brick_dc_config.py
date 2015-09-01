@@ -5,7 +5,7 @@
 # Commons Zero (CC0 1.0) License for more details.
 
 # DC Brick communication config
-
+from commonconstants import THRESHOLD_OPTION_CONSTANTS
 com = {
     'author': 'Olaf Lüke <olaf@tinkerforge.com>',
     'api_version': [2, 0, 0],
@@ -651,6 +651,95 @@ ausgelöst. Der :word:`parameter` ist die *aktuelle* vom Motor genutzte Geschwin
 
 :func:`CurrentVelocity` wird nur nach Ablauf der Periode ausgelöst, wenn sich die
 Geschwindigkeit geändert hat.
+"""
+}]
+})
+
+
+com['packets'].append({
+'type': 'function',
+'name': ('SetCurrentCallbackThreshold', 'set_current_callback_threshold'), 
+'elements': [('option', 'char', 1, 'in', THRESHOLD_OPTION_CONSTANTS),
+             ('min', 'uint16', 1, 'in'),
+             ('max', 'uint16', 1, 'in')],
+'since_firmware': [2, 0, 5],
+'doc': ['ccf', {
+'en':
+"""
+Sets the thresholds for the :func:`CurrentReached` callback. 
+
+The following options are possible:
+
+.. csv-table::
+ :header: "Option", "Description"
+ :widths: 10, 100
+
+ "'x'",    "Callback is turned off"
+ "'o'",    "Callback is triggered when the current is *outside* the min and max values"
+ "'i'",    "Callback is triggered when the current is *inside* the min and max values"
+ "'<'",    "Callback is triggered when the current is smaller than the min value (max is ignored)"
+ "'>'",    "Callback is triggered when the current is greater than the min value (max is ignored)"
+
+The default value is ('x', 0, 0).
+""",
+'de':
+"""
+Setzt den Schwellwert für den :func:`CurrentReached` Callback.
+
+Die folgenden Optionen sind möglich:
+
+.. csv-table::
+ :header: "Option", "Beschreibung"
+ :widths: 10, 100
+ 
+ "'x'",    "Callback ist inaktiv"
+ "'o'",    "Callback wird ausgelöst wenn die Stromstärke *außerhalb* des min und max Wertes ist"
+ "'i'",    "Callback wird ausgelöst wenn die Stromstärke *innerhalb* des min und max Wertes ist"
+ "'<'",    "Callback wird ausgelöst wenn die Stromstärke kleiner als der min Wert ist (max wird ignoriert)"
+ "'>'",    "Callback wird ausgelöst wenn die Stromstärke größer als der min Wert ist (max wird ignoriert)"
+ 
+Der Standardwert ist ('x', 0, 0).
+"""
+}]
+})
+
+com['packets'].append({
+'type': 'function',
+'name': ('GetCurrentCallbackThreshold', 'get_current_callback_threshold'), 
+'elements': [('option', 'char', 1, 'out', THRESHOLD_OPTION_CONSTANTS),
+             ('min', 'uint16', 1, 'out'),
+             ('max', 'uint16', 1, 'out')],
+'since_firmware': [2, 0, 5],
+'doc': ['ccf', {
+'en':
+"""
+Returns the threshold as set by :func:`SetCurrentCallbackThreshold`.
+""",
+'de':
+"""
+Gibt den Schwellwert zurück, wie von :func:`SetCurrentCallbackThreshold`
+gesetzt.
+"""
+}]
+})
+
+com['packets'].append({
+'type': 'callback',
+'name': ('CurrentThresholdReached', 'current_threshold_reached'), 
+'elements': [('current', 'uint16', 1, 'out')],
+'since_firmware': [2, 0, 5],
+'doc': ['c', {
+'en':
+"""
+This callback is triggered when the threshold as set by
+:func:`SetCurrentCallbackThreshold` is reached.
+The :word:`parameter` is the DC current in mA.
+""",
+'de':
+"""
+Dieser Callback wird ausgelöst wenn der Schwellwert, wie von 
+:func:`SetCurrentCallbackThreshold` gesetzt, erreicht wird.
+Der :word:`parameter` ist der Stromverbrauch des DC-Bricks in mA.
 """
 }]
 })
